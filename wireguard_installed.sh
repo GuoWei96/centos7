@@ -22,7 +22,6 @@ systemtap
 systemtap-devel
 wireguard-dkms
 wireguard-tools
-qrencode
 iptables-services
 )
 function install_package() {
@@ -53,10 +52,10 @@ update_kernel(){
     wget https://elrepo.org/linux/kernel/el7/x86_64/RPMS/kernel-ml-devel-4.19.1-1.el7.elrepo.x86_64.rpm
     rpm -ivh kernel-ml-devel-4.19.1-1.el7.elrepo.x86_64.rpm
     yum -y --enablerepo=elrepo-kernel install kernel-ml-devel
-    read -p "需要重启VPS，再次执行脚本选择安装wireguard，是否现在重启 ? [Y/n] :" yn
+    read -p "需要重启服务器，再次执行脚本选择安装wireguard，是否现在重启 ? [Y/n] :" yn
 	[ -z "${yn}" ] && yn="y"
 	if [[ $yn == [Yy] ]]; then
-		echo -e "VPS 重启中..."
+		echo -e "服务器 重启中..."
 		reboot
 	fi
 }
@@ -147,8 +146,6 @@ EOF
     wg-quick up wg0
     systemctl enable wg-quick@wg0
     content=$(cat /etc/wireguard/client.conf)
-    echo "电脑端请下载client.conf，手机端可直接使用软件扫码"
-    echo "${content}" | qrencode -o - -t UTF8
 }
 add_user(){
     echo -e "\033[37;41m给新用户起个名字，不能和已有用户重复\033[0m"
